@@ -138,7 +138,7 @@ public class WithdrawalBackServiceImp implements WithdrawalBackService
 		try
 		{
 			PaymentsTransferResponse jtr = (PaymentsTransferResponse) JingtongRequestUtils.sendRequest(ptr);
-			if (jtr.isSuccess())
+			if (jtr.isSuccess()&&"tesSUCCESS".equals(jtr.getResult()))
 			{
 				withdrawalBack.setResponseData(new Date());
 				withdrawalBack.setResponseHash(jtr.getHash());
@@ -147,18 +147,18 @@ public class WithdrawalBackServiceImp implements WithdrawalBackService
 			}
 			else
 			{
-				ptr.setClient_id(client_id_back_pre+"re"+ withdrawalBack.getId());
-				//再试一次
-				jtr = (PaymentsTransferResponse) JingtongRequestUtils.sendRequest(ptr);
-				if (jtr.isSuccess())
-				{
-					withdrawalBack.setResponseData(new Date());
-					withdrawalBack.setResponseHash(jtr.getHash());
-					withdrawalBack.setResponseMsg(jtr.getMessage());
-					withdrawalBack.setResponseState(WithdrawalBack.RESPONSE_STATE_SUCCESS);
-				}
-				else
-				{
+//				ptr.setClient_id(client_id_back_pre+"re"+ withdrawalBack.getId());
+//				//再试一次
+//				jtr = (PaymentsTransferResponse) JingtongRequestUtils.sendRequest(ptr);
+//				if (jtr.isSuccess()&&"tesSUCCESS".equals(jtr.getResult()))
+//				{
+//					withdrawalBack.setResponseData(new Date());
+//					withdrawalBack.setResponseHash(jtr.getHash());
+//					withdrawalBack.setResponseMsg(jtr.getMessage());
+//					withdrawalBack.setResponseState(WithdrawalBack.RESPONSE_STATE_SUCCESS);
+//				}
+//				else
+//				{
 					String msg = jtr.getMessage();
 					if(StringUtils.isEmpty(msg))
 					{
@@ -167,7 +167,7 @@ public class WithdrawalBackServiceImp implements WithdrawalBackService
 					withdrawalBack.setResponseData(new Date());
 					withdrawalBack.setResponseMsg(msg);
 					withdrawalBack.setResponseState(WithdrawalBack.RESPONSE_STATE_FAIL);
-				}
+//				}
 				
 			}
 		}
